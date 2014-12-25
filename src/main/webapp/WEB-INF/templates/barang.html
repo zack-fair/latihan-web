@@ -55,7 +55,8 @@
 
 	<div th:replace="fragments::scripts"></div>
 	
-	<script>	
+	<script th:inline="javascript">
+	/*<![CDATA[*/ 
 		$.fn.tabelku.defaults.checkStateChanged = function(e) {
         	var opacity = e.target.checked? 0.5: 1;
         	$(e.target).closest('tr').fadeTo('fast', opacity);
@@ -70,17 +71,14 @@
 	    
 		$('#tblUtama').tabelku({
 			kolom: [
-		        {nama: 'kodeBarang', text: 'Kode Barang'},
-		        {nama: 'namaBarang', text: 'Nama Barang'},
+		        {nama: 'kode', text: 'Kode Barang'},
+		        {nama: 'nama', text: 'Nama Barang'},
 		        {nama: 'qty', text: 'Qty'}
 	       	],
-	       	data: [
-       	        {kodeBarang: 'DUMMY-1', namaBarang: 'NAMA-DUMMY-1', qty: 999},
-       	        {kodeBarang: 'DUMMY-2', namaBarang: 'NAMA-DUMMY-2', qty: 999},
-       	    	{kodeBarang: 'DUMMY-3', namaBarang: 'NAMA-DUMMY-3', qty: 999},
-	       	  	{kodeBarang: 'DUMMY-4', namaBarang: 'NAMA-DUMMY-4', qty: 999},
-     	    ]
-		});
+	       	ajaxDataUrl: [[@{'/barang/list'}]],
+	       	ajaxTambahUrl: [[@{'/barang/tambah'}]],
+	       	ajaxHapusUrl: [[@{'/barang/hapus'}]]
+		});				
 		
 		$('#hapus').click(function() {
 			$('#tblUtama')[0].tabel.hapusBarisTerpilih();
@@ -90,8 +88,8 @@
 			var form = $('#dialogTambah').find('form')[0];
 			if (form.checkValidity()) {
 				var barangBaru = {
-					kodeBarang: $("#kodeBarang").val(),
-					namaBarang: $("#namaBarang").val(),
+					kode: $("#kodeBarang").val(),
+					nama: $("#namaBarang").val(),
 					qty: $("#qty").val()
 				};
 				$('#tblUtama')[0].tabel.tambahBaris(barangBaru);
@@ -102,7 +100,8 @@
 		
 		$('#dialogTambah').on('shown.bs.modal', function() {
 			$('#kodeBarang').focus();
-		});
+		});		
+	/*]]>*/
 	</script>       
  </body>
 </html>

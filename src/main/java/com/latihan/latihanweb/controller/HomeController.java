@@ -1,4 +1,4 @@
-package com.latihan.latihanweb;
+package com.latihan.latihanweb.controller;
 
 import java.util.Locale;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {		
-		return "barang";
+		return "redirect:/barang/";
 	}
 
 }
