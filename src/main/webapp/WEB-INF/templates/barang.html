@@ -76,20 +76,10 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td><input type="checkbox" /></td>
-										<td>BRG-1</td>
-										<td>Produk A</td>
-									</tr>
-									<tr>
-										<td><input type="checkbox" /></td>
-										<td>BRG-2</td>
-										<td>Produk B</td>
-									</tr>
-									<tr>
-										<td><input type="checkbox" /></td>
-										<td>BRG-3</td>
-										<td>Produk C</td>
+									<tr th:each="mBarang : ${BarangList}">
+										<td th:text="${mBarang.kode}">kode</td>
+										<td	th:text="${mBarang.nama}">nama</td>
+
 									</tr>
 								</tbody>							
 							</table>        
