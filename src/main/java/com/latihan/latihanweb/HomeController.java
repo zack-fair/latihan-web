@@ -25,6 +25,8 @@ public class HomeController {
 		
 		ListBarang.add(new Barang("101","Komputer keren",1));
 		ListBarang.add(new Barang("102","Komputer canggih",1));
+		
+		model.addAttribute("Barang", ListBarang);
 		return "barang";
 	}
 

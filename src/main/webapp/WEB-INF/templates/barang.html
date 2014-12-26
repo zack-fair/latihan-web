@@ -76,7 +76,8 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="mBarang : ${BarangList}">
+									<tr th:each="mBarang : ${Barang}">
+										<td><input type="checkbox" /></td>
 										<td th:text="${mBarang.kode}">kode</td>
 										<td	th:text="${mBarang.nama}">nama</td>
 
