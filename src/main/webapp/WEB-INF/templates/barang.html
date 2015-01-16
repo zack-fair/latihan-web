@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head th:replace="fragments/head">
+  <head th:replace="fragments::head">
   </head>
 
   <body>
 
-	<div th:include="fragments/header" th:remove="tag"></div>	
+	<div th:replace="fragments::header"></div>	
 
     <div class="container">
             
@@ -14,58 +14,96 @@
         	<h1>Barang</h1>        	
         </div>
         
-        <div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th><input type="checkbox" /></th>
-						<th>Kode Barang</th>
-						<th>Nama Barang</th>
-						<th>Qty</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>BRG-1</td>
-						<td>Produk A</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>BRG-2</td>
-						<td>Produk B</td>
-						<td>50</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>BRG-3</td>
-						<td>Produk C</td>
-						<td>200</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>BRG-4</td>
-						<td>Produk D</td>
-						<td>400</td>
-					</tr>
-				</tbody>							
-			</table>        
-        </div>
+        <table id='tblUtama'></table>
                 
         <p>
-          <a class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah</a>
-          <a class="btn btn-primary" role="button"><span class="glyphicon glyphicon-remove"></span> Hapus</a>
-        </p>      
+          <a class="btn btn-primary" role="button" id="tambah" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> Tambah</a>
+          <a class="btn btn-primary" role="button" id="hapus"><span class="glyphicon glyphicon-remove"></span> Hapus</a>
+        </p> 
+        
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        	<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        		<h4 class="modal-title" id="myModalLabel">Master Barang</h4>
+		      		</div>
+			      	<div class="modal-body">
+			      		<form class="form-horizontal">
+				      		<div class="form-group">
+								<label for="kodeBarang" class="col-sm-2 control-label">Kode Barang:</label>
+								<div class="col-sm-10"><input type="text" class="form-control" id="kodeBarang" required="required"/></div>
+							</div>
+							<div class="form-group">
+								<label for="namaBarang" class="col-sm-2 control-label">Nama Barang:</label>
+								<div class="col-sm-10"><input type="text" class="form-control" id="namaBarang" required="required"/></div>
+							</div>
+							<div class="form-group">
+								<label for="qty" class="col-sm-2 control-label">Qty:</label>
+								<div class="col-sm-10"><input type="number" class="form-control" id="qty" required="required"/></div>
+							</div>
+			      		</form>
+			      	</div>
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-default" id="simpan">Tambah item</button>
+			        	<button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+			      	</div>
+		    	</div>
+		  	</div>
+		</div>     
 
     </div> <!-- /container -->
+    
+    <div th:replace="fragments::scripts"></div>
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+			$.fn.tabelku.defaults.checkStateChanged = function(e) {
+			var opacity = e.target.checked? 0.5: 1;
+			$(e.target).closest('tr').fadeTo('fast', opacity);
+	};
+	
+	$.fn.tabelku.defaults.sebelumHapus = function(baris) {
+			baris.fadeOut('fast', function() {
+				$(baris).remove();
+			})
+			return false;
+		};
+		
+			$('#tblUtama').tabelku({
+				kolom: [
+				{nama: 'kode', text: 'Kode Barang'},
+				{nama: 'nama', text: 'Nama Barang'},
+				{nama: 'qty', text: 'Qty'}
+			],
+			ajaxDataUrl: [[@{'/barang/list'}]],
+			ajaxTambahUrl: [[@{'/barang/tambah'}]],
+			ajaxHapusUrl: [[@{'/barang/hapus'}]]
+			});
+			
+			$('#hapus').click(function() {
+				$('#tblUtama')[0].tabel.hapusBarisTerpilih();
+			});
+			
+			$('#simpan').click(function() {
+				var form = $('#dialogTambah').find('form')[0];
+				if (form.checkValidity()) {
+					var barangBaru = {
+						kode: $("#kodeBarang").val(),
+						nama: $("#namaBarang").val(),
+						qty: $("#qty").val()
+					};
+					$('#tblUtama')[0].tabel.tambahBaris(barangBaru);
+					form.reset();
+					$('#dialogTambah').modal('hide');
+				}
+			});
+		
+			$('#dialogTambah').on('shown.bs.modal', function() {
+				$('#kodeBarang').focus();
+			});
+		/*]]>*/
+		</script> 
        
  </body>
 </html>
