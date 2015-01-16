@@ -21,13 +21,13 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		List<Barang> ListBarang = new ArrayList<Barang>();
+		//List<Barang> ListBarang = new ArrayList<Barang>();
 		
-		ListBarang.add(new Barang("101","Komputer keren",1));
-		ListBarang.add(new Barang("102","Komputer canggih",1));
+		//ListBarang.add(new Barang("101","Komputer keren",1));
+		//ListBarang.add(new Barang("102","Komputer canggih",1));
 		
-		model.addAttribute("Barang", ListBarang);
-		return "barang";
+		//model.addAttribute("Barang", ListBarang);
+		return "redirect:/barang";
 	}
 
 }
